@@ -14,7 +14,7 @@ var pos = this.terraexiste.position;
 push()
 rectMode(CENTER);
 noStroke();
-fill("lime");
+fill("#804000");
 rect(pos.x,pos.y,this.lar,this.nanismo);
 pop()
 }   
