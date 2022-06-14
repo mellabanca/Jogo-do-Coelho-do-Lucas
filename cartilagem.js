@@ -13,4 +13,7 @@ class Cartilagem{
         );
         World.add(engine.world, this.link);
     }
+    sumiu(){
+        World.remove(engine.world, this.link);   
+    }
 }
