@@ -20,6 +20,7 @@ var alfredo;
 var desaparecedor;
 var alimentado;
 var piscandodementira;
+var fome
 
 function preload(){
   salinhadajanta = loadImage("./imagem falando/background.png");
@@ -27,12 +28,15 @@ function preload(){
   eunahoradajanta = loadImage("./imagem falando/Rabbit-01.png");
   piscandodementira = loadAnimation("./imagem falando/blink_1.png","./imagem falando/blink_2.png","./imagem falando/blink_3.png");
   alimentado = loadAnimation("./imagem falando/eat_0.png","./imagem falando/eat_1.png","./imagem falando/eat_2.png","./imagem falando/eat_3.png","./imagem falando/eat_4.png");
+  fome = loadAnimation("./imagem falando/sad_1.png","./imagem falando/sad_2.png","./imagem falando/sad_3.png")
 
   piscandodementira.playing = true;
   alimentado.playing = true;
 
   piscandodementira.looping = true;
   alimentado.looping = false;
+
+  fome.looping = false;
 }
 
 function setup() 
@@ -41,7 +45,7 @@ function setup()
   engine = Engine.create();
   world = engine.world;
 
-  piscandodementira.frameDelay = 5;
+  piscandodementira.frameDelay = 15;
   alimentado.frameDelay = 15;
  
   rectMode(CENTER);
@@ -58,6 +62,7 @@ function setup()
   alfredo.scale = 0.2;
   alfredo.addAnimation("piscando", piscandodementira);
   alfredo.addAnimation("comendo", alimentado);
+  alfredo.addAnimation("treinocomfome", fome)
   alfredo.changeAnimation("piscando");
 
 desaparecedor = createImg("./imagem falando/cut_btn.png");
@@ -74,7 +79,17 @@ function draw()
   Engine.update(engine);
    terra.artista();
    acorda.show();
-   image(comidinha,papinha.position.x, papinha.position.y, 50, 80);
+   if(papinha!== null){
+    image(comidinha,papinha.position.x, papinha.position.y, 50, 80);
+   }
+   if(entregado(papinha,alfredo) === true){
+    alfredo.changeAnimation("comendo")
+   }
+   if(papinha!== null && papinha.position.y>=650){
+    alfredo.changeAnimation("treinocomfome")
+    papinha = null
+   }
+
    drawSprites()
 }
 
@@ -82,4 +97,18 @@ function barrigacheia(){
   acorda.break();
   cartilagem.sumiu();
   cartilagem = null
+}
+
+function entregado(corpo,sprite){
+if(corpo!== null){
+  var oquenossepara = dist(corpo.position.x,corpo.position.y,sprite.position.x,sprite.position.y);
+  if(oquenossepara<=80){
+    World.remove(engine.world,papinha);
+    papinha = null
+    return true
+  }
+  else{
+    return false
+  }
+}
 }
